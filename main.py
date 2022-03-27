@@ -96,7 +96,8 @@ for i, c in enumerate(cnts):
         lines = approx.reshape(5, 2).tolist()
         lines = list(pairwise(lines + [lines[0]]))
         print([math.hypot(x1 - x2, y1 - y2) for ((x1, y1), (x2, y2)) in lines])
-        j = np.argmin([math.hypot(x1 - x2, y1 - y2) for ((x1, y1), (x2, y2)) in lines])
+        j = np.argmin(
+            [math.hypot(x1 - x2, y1 - y2) for ((x1, y1), (x2, y2)) in lines])
         shortest = lines[j]
         before = lines[(j - 1) % len(lines)]
         after = lines[(j + 1) % len(lines)]
@@ -151,7 +152,6 @@ cv2.imwrite(
 # bw = receipt.copy()
 # %%
 gray = cv2.cvtColor(receipt, cv2.COLOR_BGR2GRAY)
-# thresh, bw = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
 
 # https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
 bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
@@ -213,7 +213,7 @@ with open('output.txt', 'r', encoding='utf-8') as f:
     text = f.read()
 
 
-def get_total_advanced():
+def get_total_advanced(data):
     df = data.copy()
     total = df.dropna()[df.dropna().text.apply(lambda x: x.lower()) == 'total']
     if not len(total):
@@ -235,7 +235,8 @@ def get_total_advanced():
 
 def get_total():
     total = re.search(
-        r'\b(?:total|kreditkarte|total amount)[\sa-z]*(?:ca[ds]{1,2}|)[\s\$\'§=:]*([0-9\., :]+)',
+        r'\b(?:total|kreditkarte|total amount)[\sa-z]*'
+        r'(?:ca[ds]{1,2}|)[\s\$\'§=:]*([0-9\., :]+)',
         text,
         re.IGNORECASE,
     )
@@ -389,7 +390,8 @@ print(data)
 r = requests.post(
     'https://secure.splitwise.com/api/v3.0/create_expense',
     headers={
-    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0',
+    'User-Agent':
+        'Mozilla/5.0 (X11; Linux x86_64; rv:97.0) Gecko/20100101 Firefox/97.0',
     'Accept': 'application/json, text/javascript, */*; q=0.01',
     'Accept-Language': 'en-US,en;q=0.5',
     'Accept-Encoding': 'gzip, deflate, br',
@@ -410,6 +412,9 @@ r = requests.post(
     # 'Cache-Control': 'no-cache',
     },
     data=data,
-    files=[('receipt', (transformed_filename, open(transformed_filename, 'rb'), 'image/jpeg'))],
+    files=[(
+        'receipt',
+        (transformed_filename, open(transformed_filename, 'rb'), 'image/jpeg'),
+    )],
 )
 print(r)
