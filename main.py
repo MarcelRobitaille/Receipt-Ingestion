@@ -11,12 +11,16 @@ import pytesseract
 import imutils
 import cv2
 import sane
+from environs import Env
 
 from utils import pairwise, line_intersection
 
 
 # %%
 
+
+env = Env()
+env.read_env()
 
 out = Path('./out')
 out.mkdir(parents=True, exist_ok=True)
@@ -338,7 +342,7 @@ date = get_date()
 
 
 def get_paid_by():
-    if re.search(r'hihi', text):
+    if re.search(env('CARD_LAST_FOUR_DIGITS'), text):
         return 'Marcel'
     return 'Federica'
 
@@ -396,7 +400,7 @@ r = requests.post(
     'Accept-Language': 'en-US,en;q=0.5',
     'Accept-Encoding': 'gzip, deflate, br',
     'Referer': 'https://secure.splitwise.com/',
-    'X-CSRF-Token': 'not so fast',
+    'X-CSRF-Token': env('CSRF_TOKEN'),
     # 'Content-Type': 'application/x-www-form-urlencoded',
 
     # 'Content-Type': 'multipart/form-data',
@@ -404,7 +408,7 @@ r = requests.post(
     # 'Origin': 'https://secure.splitwise.com',
     # 'DNT': '1',
     # 'Connection': 'keep-alive',
-    'Cookie': 'not so fast',
+    'Cookie': env('COOKIE'),
     # 'Sec-Fetch-Dest': 'empty',
     # 'Sec-Fetch-Mode': 'cors',
     # 'Sec-Fetch-Site': 'same-origin',
