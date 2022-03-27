@@ -1,0 +1,10 @@
+imutils
+pytesseract
+argparse
+opencv-python
+scipy
+python-dateutil
+requests
+python-sane
+pandas
+pyzbar
