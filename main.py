@@ -213,9 +213,10 @@ def get_time_posibilities():
             print('get_time', time)
             yield re.sub(r'[:\s\']+', ':', time.group(0)), time
 
-    for time in re.finditer(r'\d{2}:\d{2}(am|pm)', text, re.IGNORECASE):
+    # Sometimes, PM is detected as PH by OCR
+    for time in re.finditer(r'\d{2}:\d{2}(am|pm|ph)', text, re.IGNORECASE):
         print('get_time', time)
-        yield time.group(0), time
+        yield time.group(0).replace('ph', 'pm'), time
 
 
 def get_closest_time(target):
