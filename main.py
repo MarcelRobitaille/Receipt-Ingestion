@@ -77,6 +77,14 @@ for i, c in enumerate(cnts):
     # if our approximated contour has four points, then we can
     # assume we have found the outline of the receipt
     while len(approx) > 4:
+        print(f'Approximated polygon has more than four ({len(approx)}) edges. '
+              'Trying to simplify corners.')
+        output = image.copy()
+        cv2.drawContours(output, [approx], -1, (0, 255, 0), 2)
+        cv2.imwrite(
+            str(out / f'{filename.stem}_02_too_many_edges_{len(approx)}.jpg'),
+            output,
+        )
         lines = approx.reshape(5, 2).tolist()
         lines = list(pairwise(lines + [lines[0]]))
         j = np.argmin(
