@@ -10,6 +10,7 @@ import pytesseract
 import imutils
 import cv2
 from environs import Env
+from pydantic import BaseModel
 
 from utils import pairwise, line_intersection
 
@@ -22,6 +23,12 @@ env.read_env()
 
 
 
+# %%
+class ProcessImageResult(BaseModel):
+    total: float
+    paid_by: str
+    date: str
+    store: str
 
 # %%
 
@@ -391,3 +398,4 @@ def process_image(filename):
         ))],
     )
     print(r)
+    ProcessImageResult(total=total, paid_by=paid_by, date=date, store=store)
