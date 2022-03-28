@@ -77,31 +77,16 @@ for i, c in enumerate(cnts):
     # if our approximated contour has four points, then we can
     # assume we have found the outline of the receipt
     while len(approx) > 4:
-        print(len(approx), area)
-        print(approx)
-        print(np.shape(approx))
         lines = approx.reshape(5, 2).tolist()
         lines = list(pairwise(lines + [lines[0]]))
-        print([math.hypot(x1 - x2, y1 - y2) for ((x1, y1), (x2, y2)) in lines])
         j = np.argmin(
             [math.hypot(x1 - x2, y1 - y2) for ((x1, y1), (x2, y2)) in lines])
         shortest = lines[j]
         before = lines[(j - 1) % len(lines)]
         after = lines[(j + 1) % len(lines)]
-        print(before, after)
-        print(line_intersection(before, after))
-        print(shortest)
-        print(approx)
         approx = np.delete(approx, j, axis=0)
         approx[j, 0, :] = line_intersection(before, after)
         print(approx)
-    # np.delete(approx, j)
-    # approx.insert(j, line_intersection(before, after))
-    # print(approx)
-    # shortest = lines.pop(j)
-    # print(lines)
-    print(j)
-    # lines = [x for x in approx.reshape(5, 2)]
 
     if len(approx) == 4 or len(approx) == 5:
         receiptCnt = approx
