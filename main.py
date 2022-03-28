@@ -207,7 +207,7 @@ def get_time_posibilities():
             print('get_time', time)
             yield re.sub(r'[:\s\']+', ':', time.group(0)), time
 
-    for time in re.findall(r'\d{2}:\d{2}(am|pm)', text, re.IGNORECASE):
+    for time in re.finditer(r'\d{2}:\d{2}(am|pm)', text, re.IGNORECASE):
         print('get_time', time)
         yield time.group(0), time
 
@@ -234,7 +234,7 @@ def get_date():
 
     date_regex = rf'(\d{{2}}[\s-]+(?:{"|".join(months)})[\s-]+\d{{4}})'
 
-    for date in re.findall(
+    for date in re.finditer(
         date_regex,
         text,
         re.IGNORECASE,
@@ -242,7 +242,7 @@ def get_date():
         # TODO
         print(date)
         time = get_closest_time(date)
-        date = date.lower().replace('marz', 'march').replace('-', ' ')
+        date = date.group(0).lower().replace('marz', 'march').replace('-', ' ')
         # print(date)
         # date = parser.parse(f'{date} {time}')
         date = parser.parse(f'{date}')
