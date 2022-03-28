@@ -72,7 +72,7 @@ cv2.imwrite(str(out / f'{filename.stem}_01_edges.jpg'), edged)
 # find contours in the edge map and sort them by size in descending
 # order
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
-    cv2.CHAIN_APPROX_SIMPLE)
+                        cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
 cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
 
