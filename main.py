@@ -66,6 +66,11 @@ cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
 cnts = imutils.grab_contours(cnts)
 cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
 
+# for i, c in enumerate(cnts):
+#     output = image.copy()
+#     cv2.drawContours(output, [c], -1, (0, 255, 0), 2)
+#     cv2.imwrite(str(str(out / f'{filename.stem}_02_contour_{i}.jpg')), output)
+
 receiptCnt = None
 # loop over the contours
 for i, c in enumerate(cnts):
