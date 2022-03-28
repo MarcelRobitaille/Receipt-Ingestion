@@ -128,6 +128,8 @@ cv2.imwrite(
 # bw = receipt.copy()
 # %%
 gray = cv2.cvtColor(receipt, cv2.COLOR_BGR2GRAY)
+# kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+# gray = cv2.morphologyEx(gray, cv2.MORPH_OPEN, kernel)
 
 # https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
 bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
