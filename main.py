@@ -305,6 +305,8 @@ def get_store():
         return 'Glenbriar Home Hardware'
     if store := re.search(r'(zehrs)', text, re.IGNORECASE):
         return store.group(0)
+    if re.search(r'(shoppers|drug mart)', text, re.IGNORECASE):
+        return 'Shoppers Drug Mart'
 
     return text.split('\n')[0]
 
