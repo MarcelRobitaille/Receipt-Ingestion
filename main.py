@@ -123,7 +123,6 @@ def get_date(text: str):
         text,
     ):
         print(date)
-        print('lalalalalal')
         time = get_closest_time(date, text=text)
         print(time)
         date = date.group(0).replace('/', '-')
