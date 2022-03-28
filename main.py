@@ -183,8 +183,8 @@ def get_total_advanced(data):
 
 def get_total():
     total = re.search(
-        r'\b(?:total|kreditkarte|total amount)[\sa-z]*'
-        r'(?:ca[ds]{1,2}|)[\s\$\'§=:]*([0-9\., :]+)',
+        r'\b(?:total|kreditkarte|total amount|[mh]astercard)'
+        r'[\sa-z]*(?:ca[ds]{1,2}|)[\s\$\'§=:]*([0-9\., :]+)',
         text,
         re.IGNORECASE,
     )
