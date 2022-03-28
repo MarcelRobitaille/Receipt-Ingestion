@@ -12,6 +12,7 @@ import cv2
 from environs import Env
 
 from utils import pairwise, line_intersection
+from perspective_transform_by_qr import perspective_transform_by_qr
 
 
 # %%
@@ -204,7 +205,9 @@ def process_image(filename):
     # TODO
     assert str(filename).endswith('.jpg')
 
-    orig = cv2.imread(str(filename))
+    # TODO: It's not really orig anylonger
+    orig = perspective_transform_by_qr(filename)
+    orig = cv2.cvtColor(np.array(orig), cv2.COLOR_RGB2BGR)
     if orig.shape[1] > orig.shape[0]:
         orig = cv2.rotate(orig, cv2.cv2.ROTATE_90_CLOCKWISE)
     image = orig.copy()
