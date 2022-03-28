@@ -29,8 +29,8 @@ env.read_env()
 def get_total_advanced(data, text, ocrimg, filename):
     df = data.copy()
     total = df.dropna()[df.dropna().text.apply(lambda x: x.lower()) == 'total']
-    if not len(total):
-        return None
+    # TODO
+    assert len(total)
     total = total.iloc[0]
     top = total.top + total.height
     bottom = df[df.top > top].top.min()
@@ -41,8 +41,7 @@ def get_total_advanced(data, text, ocrimg, filename):
     )
     text = pytesseract.image_to_string(total_im, config='--psm 12')
     total = re.search(r'\$?(\d+\.\d+)', text)
-    if not total:
-        return None
+    assert total is not None
     return float(total.group(1))
 
 
