@@ -103,8 +103,10 @@ for i, c in enumerate(cnts):
 # if the receipt contour is empty then our script could not find the
 # outline and we should be notified
 if receiptCnt is None:
-    raise Exception(("Could not find receipt outline. "
-        "Try debugging your edge detection and contour steps."))
+    raise Exception(
+        'Could not find receipt outline. '
+        'Try debugging your edge detection and contour steps.')
+
 output = image.copy()
 cv2.drawContours(output, [receiptCnt], -1, (0, 255, 0), 2)
 cv2.imwrite(str(str(out / f'{filename.stem}_02_contour.jpg')), output)
