@@ -126,7 +126,7 @@ gray = cv2.cvtColor(receipt, cv2.COLOR_BGR2GRAY)
 
 # https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
 bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                           cv2.THRESH_BINARY, 11, 5)
+                           cv2.THRESH_BINARY, 11, 6)
 cv2.imwrite(
     str(out / f'{filename.stem}_04_bw.jpg'),
     # imutils.resize(bw, width=500),
