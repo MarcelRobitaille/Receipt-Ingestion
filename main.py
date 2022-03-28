@@ -73,7 +73,7 @@ for i, c in enumerate(cnts):
     # https://docs.opencv.org/3.4/dd/d49/tutorial_py_contour_features.html
     peri = cv2.arcLength(c, True)
     area = cv2.contourArea(c)
-    approx = cv2.approxPolyDP(c, 0.006 * peri, True)
+    approx = cv2.approxPolyDP(c, 0.003 * peri, True)
     # if our approximated contour has four points, then we can
     # assume we have found the outline of the receipt
     while len(approx) > 4:
