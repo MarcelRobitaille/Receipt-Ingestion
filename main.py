@@ -191,6 +191,7 @@ def get_total():
         print(total)
         try:
             total = total.group(1)
+            total = total.replace(',', '.')
             total = float(re.sub(r'[ :]', '', total))
             total = int(total * 100)
             total = float((total + total % 2) / 100)
