@@ -298,7 +298,8 @@ paid_by = get_paid_by()
 
 
 def get_store():
-    if re.search('IF YOU DRINK, DON\'?T DRIVE', text):
+    if re.search(r'(IF YOU DRINK, DON\'?T DRIVE|SI VOUS BUVEZ|'
+                 r'NE PRENEZ PAS LE VOLANT)', text):
         return 'LCBO'
     if re.search('GLENBRIAR', text):
         return 'Glenbriar Home Hardware'
