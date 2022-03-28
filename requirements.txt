@@ -5,7 +5,6 @@ opencv-python
 scipy
 python-dateutil
 requests
-python-sane
 pandas
 pyzbar
 environs

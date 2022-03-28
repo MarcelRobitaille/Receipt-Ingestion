@@ -10,7 +10,6 @@ from imutils.perspective import four_point_transform
 import pytesseract
 import imutils
 import cv2
-import sane
 from environs import Env
 
 from utils import pairwise, line_intersection
@@ -30,20 +29,6 @@ out.mkdir(parents=True, exist_ok=True)
 filename = out / './IMG_20220325_232924.jpg'
 # filename = Path('/tmp/IMG_20220323_142100.jpg')
 # filename = Path('/tmp/instructions_right.jpg')
-# %%
-
-sane.init()
-try:
-    dev = sane.open('airscan:e1:Brother MFC-L3750CDW series')
-    dev.source = 'ADF'
-    dev.br_y = 5000
-    print(dev.opt)
-    dev.start()
-    im = dev.snap()
-    im.save(filename)
-    print(filename)
-finally:
-    dev.close()
 
 
 # %%
