@@ -201,6 +201,9 @@ def get_store(text: str):
 
 
 def process_image(filename):
+    # TODO
+    assert str(filename).endswith('.jpg')
+
     orig = cv2.imread(str(filename))
     if orig.shape[1] > orig.shape[0]:
         orig = cv2.rotate(orig, cv2.cv2.ROTATE_90_CLOCKWISE)
