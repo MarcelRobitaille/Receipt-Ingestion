@@ -293,6 +293,32 @@ def get_date():
             continue
         return date
 
+    for date in re.finditer(r'(\d{2}[-/]\d{2}[-/]\d{2})', text):
+        print(date)
+        time = get_closest_time(date)
+        print(time)
+        date = date.group(0).replace('/', '-')
+        print(date)
+        year, month, date = date.split('-')
+        year = f'20{year}'
+        if int(month) > 20:
+            _, c = month
+            month = f'0{c}'
+        if int(month) > 12:
+            month, date, year = year, month, date
+        if len(year) == 2:
+            year, date = date, year
+            month, date = date, month
+
+        # Sometimes, 0 looks like 6 or 8
+            # month[0] = '0'
+        # if len(date.split('-')[0]) == 2:
+        #     date = '-'.join(date.split('-')[::-1])
+        date = parser.parse(f'{year}-{month}-{date}T{time}')
+        if date > datetime.now():
+            continue
+        return date
+
     return now.strftime('%Y-%m-%dT%H:%M:%S%z')
 
 
