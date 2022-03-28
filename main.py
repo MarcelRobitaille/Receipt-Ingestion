@@ -182,20 +182,23 @@ def get_total_advanced(data):
 
 
 def get_total():
-    total = re.search(
+    for total in re.finditer(
         r'\b(?:total|kreditkarte|total amount|[mh]astercard)'
         r'[\sa-z]*(?:ca[ds]{1,2}|)[\s\$\'§=:]*([0-9\., :]+)',
         text,
         re.IGNORECASE,
-    )
-    print(total)
-    if total is None:
-        return get_total_advanced()
-    total = total.group(1)
-    total = float(re.sub(r'[ :]', '', total))
-    total = int(total * 100)
-    total = float((total + total % 2) / 100)
-    return total
+    ):
+        print(total)
+        try:
+            total = total.group(1)
+            total = float(re.sub(r'[ :]', '', total))
+            total = int(total * 100)
+            total = float((total + total % 2) / 100)
+            return total
+        except ValueError:
+            continue
+
+    return get_total_advanced()
 
 
 total = get_total()
