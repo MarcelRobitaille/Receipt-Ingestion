@@ -56,33 +56,16 @@ print(image.shape)
 image = imutils.resize(image, width=500)
 ratio = orig.shape[1] / float(image.shape[1])
 
-# convert the image to grayscale, blur it slightly, and then apply
-# edge detection
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 blurred = cv2.GaussianBlur(gray, (5, 5,), 0)
 edged = cv2.Canny(blurred, 50, 100)
-# check to see if we should show the output of our edge detection
-# procedure
-# if args["debug"] > 0:
-    # cv2.imshow("Input", image)
-    # cv2.imshow("Edged", edged)
-    # cv2.waitKey(0)
 cv2.imwrite(str(out / f'{filename.stem}_01_edges.jpg'), edged)
 
-# find contours in the edge map and sort them by size in descending
-# order
 cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
                         cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
 cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
 
-# c = cnts[0]
-# peri = cv2.arcLength(c, True)
-# approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-# print(approx)
-# %%
-# receiptCnt = cnts[0]
-# initialize a contour that corresponds to the receipt outline
 receiptCnt = None
 # loop over the contours
 for i, c in enumerate(cnts):
@@ -129,23 +112,12 @@ for i, c in enumerate(cnts):
 if receiptCnt is None:
     raise Exception(("Could not find receipt outline. "
         "Try debugging your edge detection and contour steps."))
-
-# check to see if we should draw the contour of the receipt on the
-# image and then display it to our screen
-# if args["debug"] > 0:
-    # output = image.copy()
-    # cv2.drawContours(output, [receiptCnt], -1, (0, 255, 0), 2)
-    # cv2.imshow("Receipt Outline", output)
-    # cv2.waitKey(0)
 output = image.copy()
 cv2.drawContours(output, [receiptCnt], -1, (0, 255, 0), 2)
 cv2.imwrite(str(str(out / f'{filename.stem}_02_contour.jpg')), output)
 # apply a four-point perspective transform to the *original* image to
 # obtain a top-down bird's-eye view of the receipt
 receipt = four_point_transform(orig, receiptCnt.reshape(4, 2) * ratio)
-# show transformed image
-# cv2.imshow("Receipt Transform", imutils.resize(receipt, width=500))
-# cv2.waitKey(0)
 
 transformed_filename = str(out / f'{filename.stem}_03_transformed.jpg')
 cv2.imwrite(
@@ -182,30 +154,7 @@ text = pytesseract.image_to_string(ocrimg, config=options)
 #     config=options)
 data = pytesseract.image_to_data(ocrimg, config=options,
                                  output_type=pytesseract.Output.DATAFRAME)
-# print(data.to_string())
-# height = annotated.shape[0]
-# annotated = bw.copy()
-# for box in boxes.strip().split('\n'):
-#     box = box.split(' ')[1:-1]
-#     box = [int(b) for b in box]
-#     a, b, c, d = box
-#     annotated = cv2.rectangle(
-#         annotated,
-#         (a, height - b),
-#         (c, height - d),
-#         (0, 255, 0),
-#         1,
-#     )
-# cv2.imwrite(
-#     str(out / f'{filename.stem}_05_ocr.jpg'),
-#     annotated,
-# )
-# show the raw output of the OCR process
-print('[INFO] raw output:')
-print('==================')
 print(text)
-print('\n')
-
 
 with open('output.txt', 'w', encoding='utf-8') as f:
     f.write(text)
