@@ -8,3 +8,4 @@ requests
 pandas
 pyzbar
 environs
+click
