@@ -352,7 +352,7 @@ def process_image(filename: Path):
 
     # https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
     bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                               cv2.THRESH_BINARY, 11, 6)
+                               cv2.THRESH_BINARY, 23, 10)
     if DEBUG:
         cv2.imwrite(
             str(DEBUG_IMAGE_DIR /
