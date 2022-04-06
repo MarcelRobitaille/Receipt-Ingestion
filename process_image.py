@@ -9,19 +9,10 @@ from imutils.perspective import four_point_transform
 import pytesseract
 import imutils
 import cv2
-from environs import Env
 
 from utils import pairwise, line_intersection
 from perspective_transform_by_qr import perspective_transform_by_qr
-
-
-# %%
-
-
-env = Env()
-env.read_env()
-
-
+from constants import env
 
 
 # %%
