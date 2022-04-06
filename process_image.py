@@ -306,7 +306,7 @@ def process_image(filename: Path):
             before = lines[(j - 1) % len(lines)]
             after = lines[(j + 1) % len(lines)]
             approx = np.delete(approx, j, axis=0)
-            approx[j, 0, :] = line_intersection(before, after)
+            approx[j % (approx.shape[0] - 1), 0, :] = line_intersection(before, after)
             print(approx)
 
         if len(approx) == 4 or len(approx) == 5:
