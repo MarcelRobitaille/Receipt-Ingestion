@@ -26,6 +26,7 @@ You must find your session ID and CSRF token by sniffing the request when sendin
 
 Put all the cookies in the variable `COOKIE`.
 Put the CSRF token in the variable `CSRF_TOKEN`.
+Put the group, user 1, and user 2 IDs (you can also find these in the sniffed request) in the variables (`GROUP_ID`, `USER_0_ID`, and `USER_1_ID`).
 Put the last 4 digits of the credit card of the non-default user (it will be assumed that the default user paid if these 4 do not appear in the receipt)
 in the variable `CARD_LAST_FOUR_DIGITS`.
 You can specify the directory for the `watch` command ([see below](#watch-a-directory)) with the `WATCH_DIR` variable.

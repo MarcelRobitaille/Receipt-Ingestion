@@ -405,13 +405,13 @@ def process_image(filename: Path):
     print('Total:', total)
 
     data = {
+            'group_id': env('GROUP_ID'),
             'cost': f'{total:.2f}',
             'currency_code': 'CAD',
-            'group_id': '123',
-            'users__0__user_id': '123',
+            'users__0__user_id': env('USER_0_ID'),
             'users__0__owed_share': f'{total / 2:.2f}',
             'users__1__owed_share': f'{total / 2:.2f}',
-            'users__1__user_id': '123',
+            'users__1__user_id': env('USER_1_ID'),
             'users__0__paid_share': f'{paid_shares[0]:.2f}',
             'users__1__paid_share': f'{paid_shares[1]:.2f}',
             'category_id': '18',
