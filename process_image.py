@@ -1,4 +1,5 @@
 import re
+import io
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 import math
@@ -11,6 +12,7 @@ from imutils.perspective import four_point_transform
 import pytesseract
 import imutils
 import cv2
+from PIL import Image
 
 from utils import pairwise, line_intersection
 from perspective_transform_by_qr import perspective_transform_by_qr
@@ -419,6 +421,10 @@ def process_image(filename: Path):
     print(data)
     # %%
 
+    splitwise_image = io.BytesIO()
+    Image.fromarray(cv2.cvtColor(receipt, cv2.COLOR_BGR2RGB)) \
+        .save(splitwise_image, format='JPEG')
+    splitwise_image.seek(0)
     r = requests.post(
         'https://secure.splitwise.com/api/v3.0/create_expense',
         headers={
@@ -444,10 +450,7 @@ def process_image(filename: Path):
         # 'Cache-Control': 'no-cache',
         },
         data=data,
-        files=[('receipt', (
-            transformed_filename,
-            open(transformed_filename, 'rb'),
-            'image/jpeg',
-        ))],
+        files={'receipt':
+               ('receipt.jpg', splitwise_image.getvalue(), 'image/jpeg')}
     )
     print(r)
