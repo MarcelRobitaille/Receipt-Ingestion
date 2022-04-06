@@ -3,6 +3,7 @@
 My attempt to automate receipt ingestion and sharing to [splitwise.com](https://secure.splitwise.com)
 requiring only that you take a picture of your receipt.
 This is very much made for me, and may not work for your situation.
+For example, it assumes that there are only two people in the group.
 You are welcome to try :).
 
 [Read the accompanying blog post for implementation details.](https://blog.marcelrobitaille.me/receipt-ingestion/)
