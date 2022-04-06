@@ -3,6 +3,7 @@ from pathlib import Path
 from datetime import datetime, timezone, timedelta
 import math
 
+from scipy import ndimage
 import numpy as np
 from dateutil import parser
 import requests
@@ -277,6 +278,7 @@ def process_image(filename: Path):
 
 
     receiptCnt = None
+    receipt = None
     # loop over the contours
     for i, c in enumerate(cnts):
         # approximate the contour
@@ -285,51 +287,54 @@ def process_image(filename: Path):
         approx = cv2.approxPolyDP(c, 0.003 * peri, True)
         # if our approximated contour has four points, then we can
         # assume we have found the outline of the receipt
-        while len(approx) > 4:
-            print('Approximated polygon has more than four '
-                  f'({len(approx)}) edges. Trying to simplify corners.')
+        if len(approx) > 6:
+            continue
+
+        lines = approx.reshape(-1, 2).tolist()
+        lines = list(pairwise(lines + [lines[0]]))
+        def length(line):
+            (x1, y1), (x2, y2) = line
+            return math.hypot(x1 - x2, y1 - y2)
+        longest = max(lines, key=length)
+        (x1, y1), (x2, y2) = longest
+        if DEBUG:
             output = image.copy()
-            cv2.drawContours(output, [approx], -1, (0, 255, 0), 2)
-            if DEBUG:
-                cv2.imwrite(
-                    str(DEBUG_IMAGE_DIR / filename.name
-                    .replace('.jpg', f'_06_too_many_edges_{len(approx)}.jpg')),
-                    output,
-                )
-            lines = approx.reshape(-1, 2).tolist()
-            lines = list(pairwise(lines + [lines[0]]))
-            j = np.argmin([
-                math.hypot(x1 - x2, y1 - y2)
-                for ((x1, y1), (x2, y2)) in lines
-            ])
-            before = lines[(j - 1) % len(lines)]
-            after = lines[(j + 1) % len(lines)]
-            approx = np.delete(approx, j, axis=0)
-            approx[j % (approx.shape[0] - 1), 0, :] = line_intersection(before, after)
-            print(approx)
+            output = cv2.line(output, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.imwrite(
+                str(DEBUG_IMAGE_DIR / filename.name.replace('.jpg', '_07_longest.jpg')),
+                output,
+            )
 
-        if len(approx) == 4 or len(approx) == 5:
-            receiptCnt = approx
-            print('chose', i)
-            break
-    # if the receipt contour is empty then our script could not find the
-    # outline and we should be notified
-    if receiptCnt is None:
-        raise Exception(
-            'Could not find receipt outline. '
-            'Try debugging your edge detection and contour steps.')
+        angle = math.atan2(y2 - y1, x2 - x1) + math.pi / 2
+        if angle > math.pi / 2:
+            angle = 2 * math.pi - angle
+        # angle %= math.pi
+        receipt = ndimage.rotate(image.copy(), math.degrees(angle))
+        # contour_rotated = ndimage.rotate(c, math.degrees(angle))
+        output = receipt.copy()
 
-    output = image.copy()
-    cv2.drawContours(output, [receiptCnt], -1, (0, 255, 0), 2)
-    if DEBUG:
-        cv2.imwrite(
-            str(DEBUG_IMAGE_DIR /
-                filename.name.replace('.jpg', '_07_contour.jpg')),
-            output,
-        )
-    # apply a four-point perspective transform to the *original* image to
-    # obtain a top-down bird's-eye view of the receipt
-    receipt = four_point_transform(orig, receiptCnt.reshape(4, 2) * ratio)
+        cnts = cv2.findContours(ndimage.rotate(edged.copy(), math.degrees(angle)),
+                                cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cnts = imutils.grab_contours(cnts)
+        # cnts = [c for c in cnts
+        #         if len(cv2.approxPolyDP(c, 0.016 * cv2.arcLength(c, True), True)) == 4]
+        # c = max(cnts, key=cv2.contourArea)
+        c = sorted(cnts, key=cv2.contourArea, reverse=True)[i]
+        cv2.drawContours(output, [c], -1, (0, 255, 0), 2)
+        x,y,w,h = cv2.boundingRect(c)
+        cv2.rectangle(output, (x, y), (x + w, y + h), (0, 0, 255), 2)
+
+        if DEBUG:
+            cv2.imwrite(
+                str(DEBUG_IMAGE_DIR / filename.name.replace('.jpg', '_07_contour.jpg')),
+                output,
+            )
+
+        p = 50
+        receipt = ndimage.rotate(orig, math.degrees(angle))
+        receipt = receipt[int(y * ratio) + p:int((y + h) * ratio - p),
+                          int(x * ratio) + p:int((x + w) * ratio - p)]
+        break
 
     transformed_filename = DEBUG_IMAGE_DIR / \
         filename.name.replace('.jpg', '_08_transformed.jpg')
