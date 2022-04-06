@@ -69,7 +69,7 @@ def get_time_posibilities(text: str):
             yield re.sub(r'[:\s\']+', ':', time.group(0)), time
 
     # Sometimes, PM is detected as PH by OCR
-    for time in re.finditer(r'\d{2}:\d{2}(am|pm|ph)', text, re.IGNORECASE):
+    for time in re.finditer(r'\d{2}:\d{2}(am|pm|ph|)', text, re.IGNORECASE):
         print('get_time', time)
         yield time.group(0).replace('ph', 'pm'), time
 
