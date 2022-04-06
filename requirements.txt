@@ -9,3 +9,4 @@ pandas
 pyzbar
 environs
 click
+watchdog==2.1.7
