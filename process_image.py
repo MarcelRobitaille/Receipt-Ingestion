@@ -175,7 +175,7 @@ def get_date(text: str):
 def get_paid_by(text: str):
     last_four_digits: str = env('CARD_LAST_FOUR_DIGITS')
     # Eights sometimes come across as B in OCR
-    last_four_digits = last_four_digits.replace('8', '[8B]')
+    last_four_digits = re.sub('[38]', '[38B]', last_four_digits)
     if re.search(last_four_digits, text):
         return 'Marcel'
     return 'Federica'
