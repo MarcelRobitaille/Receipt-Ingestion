@@ -190,6 +190,14 @@ def get_store(text: str):
         return 'Shoppers Drug Mart'
     if re.search(r'(zehrs|zenrs)', text, re.IGNORECASE):
         return 'Zehrs'
+    if re.search(r'Sobeys', text, re.IGNORECASE):
+        return 'Sobeys'
+    if re.search(r'JINZAKAYA', text, re.IGNORECASE):
+        return 'JINZAKAYA'
+    if re.search(r'Indigo', text, re.IGNORECASE):
+        return 'Indigo'
+    if re.search(r'Miniso', text, re.IGNORECASE):
+        return 'Miniso'
 
     return text.split('\n')[0]
 
