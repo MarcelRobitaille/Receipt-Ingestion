@@ -1,4 +1,6 @@
 from pathlib import Path
+from itertools import permutations
+
 import numpy as np
 from pyzbar.pyzbar import decode
 from PIL import Image, ImageDraw, ImageFont
@@ -92,24 +94,28 @@ def perspective_transform_by_qr(filename: Path):
     )
 
     draw.polygon(code.polygon, outline='#e945ff', width=10)
+    left, top, width, height = code.rect
+    rect = (
+        (left, top),
+        (left, top + height),
+        (left + width, top),
+        (left + width, top + height),
+    )
+    polygon = min(permutations(code.polygon), key=lambda p: sum(
+        np.hypot(a[0] - b[0], a[1] - b[1]) for a, b in zip(p, rect)
+    ))
+
     font = ImageFont.truetype('Ubuntu-M.ttf', 200, encoding='unic')
-    for i, p in enumerate(code.polygon):
+    for i, p in enumerate(polygon):
         draw.text(p, str(i), fill='#a00000', font=font)
 
     if DEBUG:
         image.save(DEBUG_IMAGE_DIR /
                    filename.name.replace('.jpg', '_02_qr.jpg'))
 
-    left, top, width, height = code.rect
-
     transformed = transform(
-        startpoints=code.polygon,
-        endpoints=(
-            (left, top + height),
-            (left + width, top + height),
-            (left + width, top),
-            (left, top),
-        ),
+        startpoints=polygon,
+        endpoints=rect,
         im=image,
     )
 
