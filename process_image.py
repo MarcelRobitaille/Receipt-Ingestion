@@ -227,7 +227,9 @@ def get_store(text: str):
     return text.split('\n')[0]
 
 
+# %%
 def process_image(filename: Path):
+    # %%
     # TODO
     assert str(filename).endswith('.jpg')
 
@@ -251,6 +253,7 @@ def process_image(filename: Path):
             edged,
         )
 
+    # %%
     cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
                             cv2.CHAIN_APPROX_SIMPLE)
     cnts = imutils.grab_contours(cnts)
@@ -338,6 +341,7 @@ def process_image(filename: Path):
                           int(x * ratio) + p:int((x + w) * ratio - p)]
         break
 
+    # %%
     transformed_filename = DEBUG_IMAGE_DIR / \
         filename.name.replace('.jpg', '_08_transformed.jpg')
     if DEBUG:
