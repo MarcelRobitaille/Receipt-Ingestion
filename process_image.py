@@ -239,7 +239,6 @@ def process_image(filename: Path):
     if orig.shape[1] > orig.shape[0]:
         orig = cv2.rotate(orig, cv2.cv2.ROTATE_90_CLOCKWISE)
     image = orig.copy()
-    print(image.shape)
     image = imutils.resize(image, width=500)
     ratio = orig.shape[1] / float(image.shape[1])
 
