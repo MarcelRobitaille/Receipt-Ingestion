@@ -296,7 +296,7 @@ def process_image(filename: Path):
                     .replace('.jpg', f'_06_too_many_edges_{len(approx)}.jpg')),
                     output,
                 )
-            lines = approx.reshape(5, 2).tolist()
+            lines = approx.reshape(-1, 2).tolist()
             lines = list(pairwise(lines + [lines[0]]))
             j = np.argmin([
                 math.hypot(x1 - x2, y1 - y2)
