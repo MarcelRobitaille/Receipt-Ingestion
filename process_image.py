@@ -234,6 +234,18 @@ def process_image(filename: Path):
     cnts = imutils.grab_contours(cnts)
     cnts = sorted(cnts, key=cv2.contourArea, reverse=True)
 
+    if DEBUG:
+        output = image.copy()
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        for i, c in enumerate(cnts):
+            cv2.putText(output, str(i), (c[:, :, 0].min(), c[:, :, 1].min()),
+                        font, 1, (0, 255, 255), 2, cv2.LINE_4)
+            cv2.drawContours(output, [c], -1, (0, 255, 0), 2)
+        cv2.imwrite(
+            str(DEBUG_IMAGE_DIR /
+                filename.name.replace('.jpg', f'_05_all_contours.jpg')),
+            output,
+        )
     # for i, c in enumerate(cnts):
     #     output = image.copy()
     #     cv2.drawContours(output, [c], -1, (0, 255, 0), 2)
