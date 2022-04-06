@@ -13,7 +13,7 @@ import cv2
 
 from utils import pairwise, line_intersection
 from perspective_transform_by_qr import perspective_transform_by_qr
-from constants import env
+from constants import env, DEBUG, DEBUG_IMAGE_DIR
 
 
 # %%
@@ -28,10 +28,11 @@ def get_total_advanced(data, text, ocrimg, filename: Path):
     top = total.top + total.height
     bottom = df[df.top > top].top.min()
     total_im = ocrimg[top:bottom, :]
-    cv2.imwrite(
-        str(filename).replace('.jpg', '_06_total.jpg'),
-        total_im,
-    )
+    if DEBUG:
+        cv2.imwrite(
+            str(DEBUG_IMAGE_DIR / filename.name.replace('.jpg', '_10_total.jpg')),
+            total_im,
+        )
     text = pytesseract.image_to_string(total_im, config='--psm 12')
     total = re.search(r'\$?(\d+\.\d+)', text)
     assert total is not None
@@ -210,7 +211,12 @@ def process_image(filename: Path):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (5, 5,), 0)
     edged = cv2.Canny(blurred, 50, 100)
-    cv2.imwrite(str(filename).replace('.jpg', '_01_edges.jpg'), edged)
+    if DEBUG:
+        cv2.imwrite(
+            DEBUG_IMAGE_DIR /
+            filename.name.replace('.jpg', '_04_edges.jpg'),
+            edged,
+        )
 
     cnts = cv2.findContours(edged.copy(), cv2.RETR_EXTERNAL,
                             cv2.CHAIN_APPROX_SIMPLE)
@@ -220,7 +226,13 @@ def process_image(filename: Path):
     # for i, c in enumerate(cnts):
     #     output = image.copy()
     #     cv2.drawContours(output, [c], -1, (0, 255, 0), 2)
-    #     cv2.imwrite(str(str(out / f'{filename.stem}_02_contour_{i}.jpg')), output)
+    #     if DEBUG:
+    #         cv2.imwrite(
+    #             str(DEBUG_IMAGE_DIR /
+    #             filename.name.replace('.jpg', f'_05_contour_{i}.jpg')),
+    #             output,
+    #         )
+
 
     receiptCnt = None
     # loop over the contours
@@ -237,11 +249,12 @@ def process_image(filename: Path):
                   f'({len(approx)}) edges. Trying to simplify corners.')
             output = image.copy()
             cv2.drawContours(output, [approx], -1, (0, 255, 0), 2)
-            cv2.imwrite(
-                str(filename)
-                .replace('jpg', f'_02_too_many_edges_{len(approx)}.jpg'),
-                output,
-            )
+            if DEBUG:
+                cv2.imwrite(
+                    str(DEBUG_IMAGE_DIR / filename.name
+                    .replace('.jpg', f'_06_too_many_edges_{len(approx)}.jpg')),
+                    output,
+                )
             lines = approx.reshape(5, 2).tolist()
             lines = list(pairwise(lines + [lines[0]]))
             j = np.argmin([
@@ -268,16 +281,23 @@ def process_image(filename: Path):
 
     output = image.copy()
     cv2.drawContours(output, [receiptCnt], -1, (0, 255, 0), 2)
-    cv2.imwrite(str(filename).replace('.jpg', '_02_contour.jpg'), output)
+    if DEBUG:
+        cv2.imwrite(
+            str(DEBUG_IMAGE_DIR /
+                filename.name.replace('.jpg', '_07_contour.jpg')),
+            output,
+        )
     # apply a four-point perspective transform to the *original* image to
     # obtain a top-down bird's-eye view of the receipt
     receipt = four_point_transform(orig, receiptCnt.reshape(4, 2) * ratio)
 
-    transformed_filename = str(filename).replace('.jpg', '_03_transformed.jpg')
-    cv2.imwrite(
-        transformed_filename,
-        imutils.resize(receipt, width=500),
-    )
+    transformed_filename = DEBUG_IMAGE_DIR / \
+        filename.name.replace('.jpg', '_08_transformed.jpg')
+    if DEBUG:
+        cv2.imwrite(
+            str(transformed_filename),
+            imutils.resize(receipt, width=500),
+        )
 
     # bw = receipt.copy()
     # %%
@@ -288,11 +308,12 @@ def process_image(filename: Path):
     # https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html
     bw = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
                                cv2.THRESH_BINARY, 11, 6)
-    cv2.imwrite(
-        str(filename).replace('jpg', '_04_bw.jpg'),
-        # imutils.resize(bw, width=500),
-        bw,
-    )
+    if DEBUG:
+        cv2.imwrite(
+            str(DEBUG_IMAGE_DIR /
+                filename.name.replace('.jpg', '_09_bw.jpg')),
+            bw,
+        )
 
     # %%
 

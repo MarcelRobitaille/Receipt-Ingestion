@@ -3,6 +3,8 @@ import numpy as np
 from pyzbar.pyzbar import decode
 from PIL import Image, ImageDraw, ImageFont
 
+from constants import DEBUG, DEBUG_IMAGE_DIR
+
 
 def find_coeffs(pa, pb):
     '''
@@ -72,7 +74,9 @@ def perspective_transform_by_qr(filename: Path):
     if image.width > image.height:
         image = image.rotate(-90, Image.NEAREST, expand=True)
 
-    image.save(str(filename).replace('.jpg', '_01_rotated.jpg'))
+    if DEBUG:
+        image.save(DEBUG_IMAGE_DIR /
+                   filename.name.replace('.jpg', '_01_rotated.jpg'))
 
     code = next(code for code in decode(image) if code.data == b'ingest me\n')
 
@@ -92,7 +96,9 @@ def perspective_transform_by_qr(filename: Path):
     for i, p in enumerate(code.polygon):
         draw.text(p, str(i), fill='#a00000', font=font)
 
-    image.save(str(filename).replace('.jpg', '_02_qr.jpg'))
+    if DEBUG:
+        image.save(DEBUG_IMAGE_DIR /
+                   filename.name.replace('.jpg', '_02_qr.jpg'))
 
     left, top, width, height = code.rect
 
@@ -107,6 +113,10 @@ def perspective_transform_by_qr(filename: Path):
         im=image,
     )
 
-    transformed.save(str(filename).replace('.jpg', '_03_transformed.jpg'))
+    if DEBUG:
+        transformed.save(
+            DEBUG_IMAGE_DIR /
+            filename.name.replace('.jpg', '_03_transformed.jpg'),
+        )
 
     return transformed
