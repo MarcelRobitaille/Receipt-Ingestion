@@ -363,7 +363,6 @@ def process_image(filename: Path):
         )
 
     # %%
-
     # https://guides.nyu.edu/tesseract/usage
 
     # apply OCR to the receipt image by assuming column data, ensuring
@@ -384,7 +383,6 @@ def process_image(filename: Path):
         f.write(text)
 
     # %%
-
     with open('output.txt', 'r', encoding='utf-8') as f:
         text = f.read()
 
@@ -420,7 +418,6 @@ def process_image(filename: Path):
         }
     print(data)
     # %%
-
     splitwise_image = io.BytesIO()
     Image.fromarray(cv2.cvtColor(receipt, cv2.COLOR_BGR2RGB)) \
         .save(splitwise_image, format='JPEG')
