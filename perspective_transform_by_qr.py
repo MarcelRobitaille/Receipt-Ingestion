@@ -67,6 +67,7 @@ def perspective_transform_by_qr(filename: Path):
        QR code.
     """
 
+    print('perspective_transform_by_qr', filename)
     image = Image.open(filename)
     if image.width > image.height:
         image = image.rotate(-90, Image.NEAREST, expand=True)
