@@ -1,3 +1,4 @@
+from pathlib import Path
 import numpy as np
 from pyzbar.pyzbar import decode
 from PIL import Image, ImageDraw, ImageFont
@@ -48,7 +49,7 @@ def transform(startpoints, endpoints, im):
     return im
 
 
-def perspective_transform_by_qr(filename):
+def perspective_transform_by_qr(filename: Path):
     """
     Straighten input image by the QR code detected in the image. This has two
     huge advantages:

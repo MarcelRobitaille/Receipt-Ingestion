@@ -1,4 +1,5 @@
 import re
+from pathlib import Path
 from datetime import datetime, timezone, timedelta
 import math
 
@@ -18,7 +19,7 @@ from constants import env
 # %%
 
 
-def get_total_advanced(data, text, ocrimg, filename):
+def get_total_advanced(data, text, ocrimg, filename: Path):
     df = data.copy()
     total = df.dropna()[df.dropna().text.apply(lambda x: x.lower()) == 'total']
     # TODO
@@ -192,7 +193,7 @@ def get_store(text: str):
     return text.split('\n')[0]
 
 
-def process_image(filename):
+def process_image(filename: Path):
     # TODO
     assert str(filename).endswith('.jpg')
 
