@@ -221,7 +221,7 @@ def process_image(filename: Path):
 
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (5, 5,), 0)
-    edged = cv2.Canny(blurred, 50, 100)
+    edged = cv2.Canny(blurred, 55, 150)
     if DEBUG:
         cv2.imwrite(
             DEBUG_IMAGE_DIR /
