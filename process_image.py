@@ -116,10 +116,7 @@ def get_date(text: str):
             continue
         return date
 
-    for date in re.finditer(
-        r'(\d{2}[-/]\d{2}[-/]\d{4}|\d{4}[-/]\d{2}[-/]\d{2})',
-        text,
-    ):
+    for date in re.finditer(r'\d{4}[-/]\d{2}[-/]\d{2}', text):
         print(date)
         time = get_closest_time(date, text=text)
         print(time)
@@ -129,11 +126,32 @@ def get_date(text: str):
         if int(month) > 20:
             _, c = month
             month = f'0{c}'
+
+        # Sometimes, 0 looks like 6 or 8
+            # month[0] = '0'
+        # if len(date.split('-')[0]) == 2:
+        #     date = '-'.join(date.split('-')[::-1])
+        date = parser.parse(f'{year}-{month}-{date}T{time}')
+        if date > datetime.now():
+            continue
+        return date
+
+    for date in re.finditer(r'\d{2}[-/]\d{2}[-/]\d{4}', text):
+        print(date)
+        time = get_closest_time(date, text=text)
+        print(time)
+        date = date.group(0).replace('/', '-')
+        print(date)
+        month, date, year = date.split('-')
+        if int(month) > 20:
+            _, c = month
+            month = f'0{c}'
         if int(month) > 12:
-            month, date, year = year, month, date
-        if len(year) == 2:
-            year, date = date, year
-            month, date = date, month
+            date, month = month, date
+            # month, date, year = year, month, date
+        # if len(year) == 2:
+        #     year, date = date, year
+        #     month, date = date, month
 
         # Sometimes, 0 looks like 6 or 8
             # month[0] = '0'
