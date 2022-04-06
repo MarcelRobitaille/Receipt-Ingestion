@@ -46,7 +46,6 @@ def get_total(text: str, *args, **kwargs):
         text,
         re.IGNORECASE,
     ):
-        print(total)
         if re.search('tax', total.group(0), re.IGNORECASE):
             print('Skipping found total with tax', total.group(0))
             continue
