@@ -302,7 +302,6 @@ def process_image(filename: Path):
                 math.hypot(x1 - x2, y1 - y2)
                 for ((x1, y1), (x2, y2)) in lines
             ])
-            shortest = lines[j]
             before = lines[(j - 1) % len(lines)]
             after = lines[(j + 1) % len(lines)]
             approx = np.delete(approx, j, axis=0)
