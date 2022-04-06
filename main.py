@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import click
 
 from process_image import process_image
@@ -12,7 +14,7 @@ def main():
 @main.command()
 @click.argument('filename', required=True, type=click.Path())
 def process_file(filename):
-    process_image(filename)
+    process_image(Path(filename))
 
 
 @main.command()
