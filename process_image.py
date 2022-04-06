@@ -41,7 +41,7 @@ def get_total_advanced(data, text, ocrimg, filename: Path):
 
 def get_total(text: str, *args, **kwargs):
     for total in re.finditer(
-        r'\b(?:total|kreditkarte|total amount|[mh]astercard)'
+        r'\b(?:tota[li]|kreditkarte|total amount|[mh]astercard)'
         r'[\sa-z]*(?:ca[ds]{1,2}|)[\s\$\'§=:]*([0-9\., :]+)',
         text,
         re.IGNORECASE,
