@@ -53,8 +53,10 @@ def get_total(text: str, *args, **kwargs):
         try:
             total = total.group(1)
             total = total.replace(',', '.')
-            if len(total) >= 5:
+            if ' ' in total and '.' not in total:
                 total = total.replace(' ', '.')
+            elif ' ' in total:
+                total = total.replace(' ', '')
             total = float(re.sub(r'[ :]', '', total))
             total = int(total * 100)
             total = float((total + total % 2) / 100)
