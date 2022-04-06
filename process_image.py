@@ -416,7 +416,6 @@ def process_image(filename: Path):
             'description': store,
             'creation_method': 'equal',
         }
-    print(data)
     # %%
     splitwise_image = io.BytesIO()
     Image.fromarray(cv2.cvtColor(receipt, cv2.COLOR_BGR2RGB)) \
