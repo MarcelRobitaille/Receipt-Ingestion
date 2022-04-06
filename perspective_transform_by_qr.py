@@ -25,13 +25,22 @@ def transform(startpoints, endpoints, im):
     Perform a perspective transformation on an image where startpoints are moved
     to endpoints, and the image is stretched accordingly.
     '''
+
+    # To try to keep the receipt inside the image during perspective
+    # transform, output a larger image than the input and shift the QR target
+    # towards the bigger image's center. This is effectively the same as
+    # making the input image bigger from its center.
+    scale = 0.5
     width, height = im.size
+    endpoints = np.array(endpoints)
+    endpoints[:, 0] += int(width * scale / 2)
+    endpoints[:, 1] += int(height * scale / 2)
     coeffs = find_coeffs(endpoints, startpoints)
 
     # Increase the height slightly in case the rotation makes the receipt go
     # outside of the original image size
     im = im.transform(
-        (width, int(height * 1.2)),
+        (int(width * (1 + scale)), int(height * (1 + scale))),
         Image.PERSPECTIVE,
         coeffs,
         Image.BICUBIC,
