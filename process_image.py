@@ -331,7 +331,7 @@ def process_image(filename: Path):
     # the text is *concatenated across the row* (additionally, for your
     # own images you may need to apply additional processing to cleanup
     # the image, including resizing, thresholding, etc.)
-    options = '--psm 4 -l eng'
+    options = '--psm 11 -l eng'
     ocrimg = bw
     text = pytesseract.image_to_string(ocrimg, config=options)
     # boxes = pytesseract.image_to_boxes(
