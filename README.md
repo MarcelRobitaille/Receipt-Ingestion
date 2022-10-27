@@ -8,6 +8,8 @@ You are welcome to try :).
 
 [Read the accompanying blog post for implementation details.](https://blog.marcelrobitaille.me/receipt-ingestion/)
 
+:fire: This project was [featured on Hackaday!](https://hackaday.com/2022/04/21/scanning-receipts-proves-trickier-than-anticipated/) :fire:
+
 ## Setup
 
 I am using Python 3.10.3, but older versions will probably work as well.
